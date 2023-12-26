@@ -1,0 +1,66 @@
+{
+  "name": "argsclopts",
+  "description": "cliclopts but for Node.js parseArgs",
+  "version": "0.0.0",
+  "author": "Bret Comnes <bcomnes@gmail.com> (https://bret.io)",
+  "bugs": {
+    "url": "https://github.com/bcomnes/argsclopts/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@voxpelli/tsconfig": "^10.0.0",
+    "@types/node": "^20.8.4",
+    "standard": "^17.0.0",
+    "npm-run-all2": "^6.0.0",
+    "auto-changelog": "^2.0.0",
+    "gh-release": "^7.0.0",
+    "c8": "^8.0.0",
+    "typescript": "~5.3.2"
+  },
+  "engines": {
+    "node": ">=21",
+    "npm": ">=10"
+  },
+  "homepage": "https://github.com/bcomnes/argsclopts",
+  "keywords": [],
+  "license": "MIT",
+  "type": "module",
+  "module": "index.js",
+  "main": "index.js",
+  "exports": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bcomnes/argsclopts.git"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build && git push --follow-tags && gh-release -y",
+    "postpublish": "npm run clean",
+    "test": "run-s test:*",
+    "test:standard": "standard --verbose",
+    "test:node-test": "c8 node --test --test-reporter spec",
+    "test:tsc": "tsc",
+    "version": "run-s version:*",
+    "version:changelog": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:'",
+    "version:git": "git add CHANGELOG.md",
+    "clean": "run-p clean:*",
+    "clean:declarations-top": "rm -rf $(find . -maxdepth 1 -type f -name '*.d.ts*')",
+    "clean:declarations-lib": "rm -rf $(find lib -type f -name '*.d.ts*' ! -name '*-types.d.ts')",
+    "build": "npm run clean && run-p build:*",
+    "build:declaration": "tsc -p declaration.tsconfig.json"
+  },
+  "standard": {
+    "ignore": [
+      "dist"
+    ]
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/bcomnes"
+  },
+  "c8": {
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  }
+}

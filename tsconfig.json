@@ -1,0 +1,13 @@
+{
+  "extends": "@voxpelli/tsconfig/node18.json",
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
+  "include": [
+    "index.js",
+    "index.test.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
