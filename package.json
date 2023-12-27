@@ -1,7 +1,7 @@
 {
   "name": "argsclopts",
   "description": "cliclopts but for Node.js parseArgs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Bret Comnes <bcomnes@gmail.com> (https://bret.io)",
   "bugs": {
     "url": "https://github.com/bcomnes/argsclopts/issues"
