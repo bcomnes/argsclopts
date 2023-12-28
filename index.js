@@ -101,11 +101,10 @@ export async function header ({
   let pkg
   if (!name && pkgPath) {
     pkg = await readPkg(pkgPath)
-  } else {
-    throw new Error('A pkgPath or name must be provided')
   }
 
   const pkgName = name ?? pkg?.name
+
   if (!pkgName) throw new Error('A name cannot be determined')
 
   const header = [headerFn({ name: pkgName }), exampleFn({ name: pkgName })].join('\n')
@@ -135,8 +134,6 @@ export async function footer ({
   let pkg
   if ((!name || !version) && pkgPath) {
     pkg = await readPkg(pkgPath)
-  } else {
-    throw new Error('A pkgPath or name must be provided')
   }
 
   const pkgName = name ?? pkg?.name
