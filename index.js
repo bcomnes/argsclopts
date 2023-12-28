@@ -81,7 +81,7 @@ export async function readPkg (pkgPath) {
  * Generates a header string based on the provided parameters.
  *
  * @param {Object} params - The parameters object.
- * @param {string} params.pkgPath - The path to the package file. Used to determine the package name if 'name' is not provided.
+ * @param {string} [params.pkgPath] - The path to the package file. Used to determine the package name if 'name' is not provided.
  * @param {string} [params.name] - The name to be used in the header. If not provided, it's extracted from the package file at 'pkgPath'.
  * @param {FormatterFunction} [params.headerFn] - A function that returns the usage string.
  * @param {FormatterFunction} [params.exampleFn] - A function that returns an example string.
@@ -117,7 +117,7 @@ export async function header ({
  * Generates a footer string based on the provided parameters.
  *
  * @param {Object} params - The parameters object.
- * @param {string} params.pkgPath - The path to the package file. Used to determine the package name if 'name' is not provided.
+ * @param {string} [params.pkgPath] - The path to the package file. Used to determine the package name if 'name' is not provided.
  * @param {string} [params.name] - The name to be used in the header. If not provided, it's extracted from the package file at 'pkgPath'.
  * @param {string} [params.version] - The version to be used in the footer. If not provided, it's extracted from the package file at 'pkgPath'.
  * @param {FormatterFunction} [params.footerFn] - A function that returns the footer string.
@@ -152,8 +152,8 @@ export async function footer ({
  * Generate the full help text string
  *
  * @param {Object} params
- * @param {string} params.pkgPath - The path to a package.json.
  * @param {ArgscloptsParseArgsOptionsConfig} params.options - Options matching the config.options shape in util.parseArgs
+ * @param {string} [params.pkgPath] - The path to a package.json.
  * @param {string} [params.name] - The bin name
  * @param {string} [params.version] - The bin version
  * @param {FormatterFunction} [params.headerFn] - A function that returns the usage string.
@@ -186,8 +186,8 @@ export async function formatHelpText ({
  * Generate and print the full help text string
  *
  * @param {Object} params
- * @param {string} params.pkgPath - The path to a package.json.
  * @param {ArgscloptsParseArgsOptionsConfig} params.options - Options matching the config.options shape in util.parseArgs
+ * @param {string} [params.pkgPath] - The path to a package.json.
  * @param {string} [params.name] - The bin name
  * @param {string} [params.version] - The bin version
  * @param {FormatterFunction} [params.headerFn] - A function that returns the usage string.
