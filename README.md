@@ -15,9 +15,13 @@ npm install argsclopts
 ## Usage
 
 ``` js
-import { formatHelpText, printHelpText } from 'argsclopts'
+import { printHelpText } from 'argsclopts'
 import { join } from 'node:path'
 import { parseArgs } from 'node:util'
+
+/**
+ * @typedef {import('argsclopts').ArgscloptsParseArgsOptionsConfig} ArgscloptsParseArgsOptionsConfig
+ */
 
 const pkgPath = join(import.meta.dirname, 'package.json')
 
@@ -53,8 +57,52 @@ argsclopts (v1.0.0)
 
 const args = ['-f', '--bar', 'b']
 const { values } = parseArgs({ args, options })
+console.log(values)
 // { foo: true, bar: 'b' }
 ```
+
+## API
+
+### `import { formatHelpText, printHelpText, usage, header, footer } from 'argsclopts'`
+
+You can import `formatHelpText`, `printHelpText`, `usage`, `header`, `footer` from `argsclopts`.
+s
+### `helpText = formatHelpText({ options, [pkgPath], [name], [version], [footerFn], [headerFn], [exampleFn]})`
+
+Generate the `helptText` string. Requires passing in an `options` object that you provide to [`parseArgs`](https://nodejs.org/api/util.html#utilparseargsconfig), with one additional field per flag: `help`. You should also provide `pkgPath` (a resolved path the `package.json`) so that a bin name and version can be resolved. Otherwise, pass in a `name` and `version` to override any resolved data from `pkgPath`. If both  `name` and `version` are provided, a `pkgPath` is required. The `headerFn`, and `exampleFn` can be used to override the header text and the `footerFn` can be used to override the footer text.
+
+An example `options` object might look like this:
+
+```js
+const options = {
+  foo: {
+    type: 'boolean',
+    short: 'f',
+    help: 'A foo flag thats a boolean'
+  },
+  bar: {
+    type: 'string',
+    help: 'A bar flag thats a string'
+  }
+}
+```
+
+
+### `void printHelpText({ options, [pkgPath], [name], [version], [footerFn], [headerFn], [exampleFn]})`
+
+Exactly the same as `formatHelpText` except it uses `console.log` to print the text for you. Returns nothing.
+
+### `usageText = usage(options)`
+
+Generate just the usage string with a given `options` object.
+
+### `headerText = header({ [pkgPath], [name], [headerFn], [exampleFn] })
+
+Generate the headerText only. Pass in either a `pkgPath` string path to the `package.json` of the bin you are printing for, or a `name`. The `headerFn` and `exampleFn` allow you to override the header text that is generated. Each function receilves an object with a `name` key.
+
+### `footerText = footer({ [pkgPath], [name], [version], [footerFn] })`
+
+Generate the footerText only. Pass in either a `pkgPath` string path to the `package.json` of the bin you are printing for, or a `name` and/or `version`. The `footerFn` lets you override the footer text template and receives an object with a `name` and `version` key.
 
 ## License
 

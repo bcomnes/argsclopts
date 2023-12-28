@@ -83,7 +83,7 @@ export async function readPkg (pkgPath) {
  * @param {Object} params - The parameters object.
  * @param {string} params.pkgPath - The path to the package file. Used to determine the package name if 'name' is not provided.
  * @param {string} [params.name] - The name to be used in the header. If not provided, it's extracted from the package file at 'pkgPath'.
- * @param {FormatterFunction} [params.usageFn] - A function that returns the usage string.
+ * @param {FormatterFunction} [params.headerFn] - A function that returns the usage string.
  * @param {FormatterFunction} [params.exampleFn] - A function that returns an example string.
  * @returns {Promise<string>} - A promise that resolves to the constructed header string.
  * @throws {Error} If a name cannot be determined.
@@ -95,9 +95,8 @@ export async function readPkg (pkgPath) {
 export async function header ({
   pkgPath,
   name,
-  usageFn = ({ name }) => `Usage: ${name} [options]\n`,
+  headerFn = ({ name }) => `Usage: ${name} [options]\n`,
   exampleFn = ({ name }) => indent + `Example: ${name}\n`
-
 }) {
   let pkg
   if (!name && pkgPath) {
@@ -109,7 +108,7 @@ export async function header ({
   const pkgName = name ?? pkg?.name
   if (!pkgName) throw new Error('A name cannot be determined')
 
-  const header = [usageFn({ name: pkgName }), exampleFn({ name: pkgName })].join('\n')
+  const header = [headerFn({ name: pkgName }), exampleFn({ name: pkgName })].join('\n')
 
   return header
 }
@@ -157,7 +156,7 @@ export async function footer ({
  * @param {ArgscloptsParseArgsOptionsConfig} params.options - Options matching the config.options shape in util.parseArgs
  * @param {string} [params.name] - The bin name
  * @param {string} [params.version] - The bin version
- * @param {FormatterFunction} [params.usageFn] - A function that returns the usage string.
+ * @param {FormatterFunction} [params.headerFn] - A function that returns the usage string.
  * @param {FormatterFunction} [params.exampleFn] - A function that returns an example string.
  * @param {FormatterFunction} [params.footerFn] - A function that returns the footer string.
  * @returns {Promise<string>} - A promise that resolves to the constructed footer string.
@@ -171,11 +170,11 @@ export async function formatHelpText ({
   name,
   version,
   footerFn,
-  usageFn,
+  headerFn,
   exampleFn
 }) {
   const helpText = [
-    await header({ pkgPath, name, usageFn, exampleFn }),
+    await header({ pkgPath, name, headerFn, exampleFn }),
     usage(options),
     await footer({ pkgPath, name, version, footerFn })
   ]
@@ -191,7 +190,7 @@ export async function formatHelpText ({
  * @param {ArgscloptsParseArgsOptionsConfig} params.options - Options matching the config.options shape in util.parseArgs
  * @param {string} [params.name] - The bin name
  * @param {string} [params.version] - The bin version
- * @param {FormatterFunction} [params.usageFn] - A function that returns the usage string.
+ * @param {FormatterFunction} [params.headerFn] - A function that returns the usage string.
  * @param {FormatterFunction} [params.exampleFn] - A function that returns an example string.
  * @param {FormatterFunction} [params.footerFn] - A function that returns the footer string.
  * @throws {Error} If a name cannot be determined.
@@ -204,11 +203,11 @@ export async function printHelpText ({
   name,
   version,
   footerFn,
-  usageFn,
+  headerFn,
   exampleFn
 }) {
   const helpText = [
-    await header({ pkgPath, name, usageFn, exampleFn }),
+    await header({ pkgPath, name, headerFn, exampleFn }),
     usage(options),
     await footer({ pkgPath, name, version, footerFn })
   ]
