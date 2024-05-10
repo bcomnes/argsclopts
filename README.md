@@ -96,7 +96,7 @@ Exactly the same as `formatHelpText` except it uses `console.log` to print the t
 
 Generate just the usage string with a given `options` object.
 
-### `headerText = header({ [pkgPath], [name], [headerFn], [exampleFn] })
+### `headerText = header({ [pkgPath], [name], [headerFn], [exampleFn] })`
 
 Generate the headerText only. Pass in either a `pkgPath` string path to the `package.json` of the bin you are printing for, or a `name`. The `headerFn` and `exampleFn` allow you to override the header text that is generated. Each function receilves an object with a `name` key.
 
