@@ -23,20 +23,6 @@ jobs:
         node-version: ${{ matrix.node }}
     - run: npm i
     - run: npm test --color=always
-    - name: Coveralls
-      uses: coverallsapp/github-action@v2
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        parallel: true
-
-  coverage:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Close parallel build
-        uses: coverallsapp/github-action@v2
-        with:
-          parallel-finished: true
 
   automerge:
     needs: test

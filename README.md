@@ -1,7 +1,7 @@
 # argsclopts
 [![latest version](https://img.shields.io/npm/v/argsclopts.svg)](https://www.npmjs.com/package/argsclopts)
 [![Actions Status](https://github.com/bcomnes/argsclopts/workflows/tests/badge.svg)](https://github.com/bcomnes/argsclopts/actions)
-[![Coverage Status](https://coveralls.io/repos/github/bcomnes/argsclopts/badge.svg?branch=master)](https://coveralls.io/github/bcomnes/argsclopts?branch=master)
+
 [![downloads](https://img.shields.io/npm/dm/argsclopts.svg)](https://npmtrends.com/argsclopts)
 [![Types in JS](https://img.shields.io/badge/types_in_js-yes-brightgreen)](https://github.com/voxpelli/types-in-js)
 [![Socket Badge](https://socket.dev/api/badge/npm/package/argsclopts)](https://socket.dev/npm/package/argsclopts)
