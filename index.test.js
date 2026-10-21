@@ -2,11 +2,41 @@ import test from 'node:test'
 import assert from 'node:assert'
 import { join } from 'node:path'
 import { parseArgs } from 'node:util'
-import { formatHelpText, readPkg } from './index.js'
+import { formatHelpText, readPkg, header, footer } from './index.js'
 
 /**
  * @typedef {import('./index.js').ArgscloptsParseArgsOptionsConfig} ArgscloptsParseArgsOptionsConfig
  */
+
+test('Header and footer accept explicitly undefined optional values', async () => {
+  const pkgPath = join(import.meta.dirname, 'package.json')
+  const pkg = await readPkg(pkgPath)
+
+  assert.equal(await header({
+    pkgPath,
+    name: undefined,
+    headerFn: undefined,
+    exampleFn: undefined
+  }), `Usage: ${pkg.name} [options]\n\n    Example: ${pkg.name}\n`)
+
+  assert.equal(await footer({
+    pkgPath,
+    name: undefined,
+    version: undefined,
+    footerFn: undefined
+  }), `${pkg.name} (v${pkg.version})`)
+
+  assert.equal(await header({
+    pkgPath: undefined,
+    name: 'example'
+  }), 'Usage: example [options]\n\n    Example: example\n')
+
+  assert.equal(await footer({
+    pkgPath: undefined,
+    name: 'example',
+    version: '1.0.0'
+  }), 'example (v1.0.0)')
+})
 
 test('Help text string is generated', async (_) => {
   // @ts-ignore

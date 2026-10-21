@@ -81,10 +81,10 @@ export async function readPkg (pkgPath) {
  * Generates a header string based on the provided parameters.
  *
  * @param {Object} params - The parameters object.
- * @param {string} [params.pkgPath] - The path to the package file. Used to determine the package name if 'name' is not provided.
- * @param {string} [params.name] - The name to be used in the header. If not provided, it's extracted from the package file at 'pkgPath'.
- * @param {FormatterFunction} [params.headerFn] - A function that returns the usage string.
- * @param {FormatterFunction} [params.exampleFn] - A function that returns an example string.
+ * @param {string | undefined} [params.pkgPath] - The path to the package file. Used to determine the package name if 'name' is not provided.
+ * @param {string | undefined} [params.name] - The name to be used in the header. If not provided, it's extracted from the package file at 'pkgPath'.
+ * @param {FormatterFunction | undefined} [params.headerFn] - A function that returns the usage string.
+ * @param {FormatterFunction | undefined} [params.exampleFn] - A function that returns an example string.
  * @returns {Promise<string>} - A promise that resolves to the constructed header string.
  * @throws {Error} If a name cannot be determined.
  *
@@ -116,10 +116,10 @@ export async function header ({
  * Generates a footer string based on the provided parameters.
  *
  * @param {Object} params - The parameters object.
- * @param {string} [params.pkgPath] - The path to the package file. Used to determine the package name if 'name' is not provided.
- * @param {string} [params.name] - The name to be used in the header. If not provided, it's extracted from the package file at 'pkgPath'.
- * @param {string} [params.version] - The version to be used in the footer. If not provided, it's extracted from the package file at 'pkgPath'.
- * @param {FormatterFunction} [params.footerFn] - A function that returns the footer string.
+ * @param {string | undefined} [params.pkgPath] - The path to the package file. Used to determine the package name if 'name' is not provided.
+ * @param {string | undefined} [params.name] - The name to be used in the header. If not provided, it's extracted from the package file at 'pkgPath'.
+ * @param {string | undefined} [params.version] - The version to be used in the footer. If not provided, it's extracted from the package file at 'pkgPath'.
+ * @param {FormatterFunction | undefined} [params.footerFn] - A function that returns the footer string.
  * @returns {Promise<string>} - A promise that resolves to the constructed footer string.
  * @throws {Error} If a name cannot be determined.
  *

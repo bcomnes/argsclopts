@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        node: ['21']
+        node: ['24']
 
     steps:
     - uses: actions/checkout@v7

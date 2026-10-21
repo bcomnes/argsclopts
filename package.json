@@ -10,7 +10,8 @@
   "devDependencies": {
     "@voxpelli/tsconfig": "^17.0.0",
     "@types/node": "^26.0.0",
-    "standard": "^17.0.0",
+    "eslint": "^10.13.0",
+    "neostandard": "^0.14.1",
     "npm-run-all2": "^9.0.0",
     "auto-changelog": "^2.0.0",
     "gh-release": "^8.1.0",
@@ -37,7 +38,7 @@
     "prepublishOnly": "npm run build && git push --follow-tags && gh-release -y",
     "postpublish": "npm run clean",
     "test": "run-s test:*",
-    "test:standard": "standard --verbose",
+    "test:eslint": "eslint .",
     "test:node-test": "c8 node --test --test-reporter spec",
     "test:tsc": "tsc",
     "version": "run-s version:*",
@@ -49,11 +50,7 @@
     "build": "npm run clean && run-p build:*",
     "build:declaration": "tsc -p declaration.tsconfig.json"
   },
-  "standard": {
-    "ignore": [
-      "dist"
-    ]
-  },
+
   "funding": {
     "type": "individual",
     "url": "https://github.com/sponsors/bcomnes"
