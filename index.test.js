@@ -39,7 +39,6 @@ test('Header and footer accept explicitly undefined optional values', async () =
 })
 
 test('Help text string is generated', async (_) => {
-  // @ts-ignore
   const pkgPath = join(import.meta.dirname, 'package.json')
   /** @type {ArgscloptsParseArgsOptionsConfig} */
   const options = {

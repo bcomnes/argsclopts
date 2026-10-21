@@ -6,13 +6,22 @@ updates:
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 1
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-minor"
+          - "version-update:semver-patch"
     groups:
       typescript:
         patterns:
-          - "@voxpelli/tsconfig"
-          - "@types/node"
           - "typescript"
+          - "@types/node"
+          - "@voxpelli/tsconfig"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 1

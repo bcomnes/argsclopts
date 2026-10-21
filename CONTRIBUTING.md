@@ -2,21 +2,25 @@
 
 ## Releasing
 
-Changelog, and releasing is autmated with npm scripts and actions.  To create a release:
+Releases use [releasearoni](https://github.com/bcomnes/releasearoni) and [npm-bump](https://github.com/bcomnes/npm-bump).
 
-- Navigate to the actions tab
-- Select the `npm bump` action.
-- Trigger an action, specifying the semantic version bump that is needed.
-- Changelog, Github release and npm publish is hanlded by the action.
-- An in depth review of this system is documented here: [bret.io/projects/package-automation](https://bret.io/projects/package-automation/)
+- Navigate to the Actions tab and select `Version and Release`.
+- Run the workflow on `master`, choosing `patch`, `minor`, `major`, or `custom`.
+- For `custom`, also supply the desired version in `new-version`.
+- The workflow runs tests, updates the version and changelog, builds declarations, pushes the release commit and tag, creates the GitHub release, and publishes to npm.
 
-If for some reason that isn't workoing or a local release is preferred, follow these steps:
+The npm package must have a GitHub Actions trusted publisher configured for owner `bcomnes`, repository `argsclopts`, and workflow `release.yml`. The workflow uses OIDC (`id-token: write`) rather than an `NPM_TOKEN` secret.
 
-- Ensure a clean working git workspace.
-- Run `npm version {patch,minor,major}`.
-  - This wills update the version number and generate the changelog.
-- Run `npm publish`.
-  - This will push your local git branch and tags to the default remote, perform a [gh-release](https://ghub.io/gh-release), and create an npm publication
+For a local release:
+
+- Use Node.js `^22.13.0 || >=24` and npm 10 or newer.
+- Ensure a clean working tree on an up-to-date `master` and run `npm install` and `npm test`.
+- Run `npm version {patch,minor,major}` to update the version and generate the changelog.
+- Run `npm publish`. The `releasearoni` prepublish hook checks npm authentication, builds declarations, pushes the branch and tags, and creates the GitHub release. Local publishing also requires GitHub authentication.
+
+## Testing
+
+Run `npm test` for ESLint, TypeScript checks, and the Node.js test runner. Native Node.js coverage is printed to the terminal and written to the ignored `lcov.info` file. Run `npm run build` to regenerate TypeScript declarations.
 
 ## Guidelines
 
