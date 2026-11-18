@@ -48,8 +48,8 @@ Usage: argsclopts [options]
 
     Example: argsclopts
 
-    --foo, -f             A foo flag thats a boolean
-    --bar                 A bar flag thats a string
+    --foo, -f              A foo flag thats a boolean
+    --bar                  A bar flag thats a string
 
 argsclopts (v1.0.0)
 

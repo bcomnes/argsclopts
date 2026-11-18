@@ -38,13 +38,13 @@ export function usage (options) {
       output += helpLabel
 
       let offset = 0
-      if (helpLabel.length > width) {
+      if (helpLabel.length >= width) {
         output += '\n' + indent
       } else {
         offset = helpLabel.length
       }
 
-      output += Array(width - offset).join(' ')
+      output += ' '.repeat(width - offset)
       output += opt.help
       if (opt.default) {
         output += ' (default: ' + JSON.stringify(opt.default) + ')'
