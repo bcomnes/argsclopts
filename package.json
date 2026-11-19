@@ -1,7 +1,7 @@
 {
   "name": "argsclopts",
   "description": "cliclopts but for Node.js parseArgs",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "author": "Bret Comnes <bcomnes@gmail.com> (https://bret.io)",
   "bugs": {
     "url": "https://github.com/bcomnes/argsclopts/issues"
@@ -48,7 +48,6 @@
     "version": "releasearoni version",
     "clean": "run-p clean:*",
     "clean:declarations-top": "rm -rf $(find . -maxdepth 1 -type f -name '*.d.ts*')",
-
     "build": "npm run clean && run-p build:*",
     "build:declaration": "tsc -p declaration.tsconfig.json"
   },
