@@ -2,11 +2,34 @@ import test from 'node:test'
 import assert from 'node:assert'
 import { join } from 'node:path'
 import { parseArgs } from 'node:util'
-import { formatHelpText, readPkg, header, footer } from './index.js'
+import { formatHelpText, readPkg, header, footer, usage } from './index.js'
 
 /**
  * @typedef {import('./index.js').ArgscloptsParseArgsOptionsConfig} ArgscloptsParseArgsOptionsConfig
  */
+
+for (const length of [21, 22, 23, 24]) {
+  test(`Usage separates and aligns descriptions for ${length}-character labels`, () => {
+    const label = '--' + 'x'.repeat(length - 2)
+    const expected = length < 23
+      ? `    ${label}${' '.repeat(23 - length)}Description\n`
+      : `    ${label}\n${' '.repeat(27)}Description\n`
+
+    assert.equal(usage({
+      [label.slice(2)]: { type: 'boolean', help: 'Description' }
+    }), expected)
+    assert.equal(usage({
+      example: { type: 'string', helpLabel: label, help: 'Description' }
+    }), expected)
+  })
+}
+
+test('Usage includes short aliases when measuring label width', () => {
+  assert.equal(usage({
+    'continue-on-error': { type: 'boolean', short: 'c', help: 'Continue' },
+    abcdefghijklmnopqr: { type: 'boolean', short: 'a', help: 'Next' }
+  }), `    --continue-on-error, -c\n${' '.repeat(27)}Continue\n    --abcdefghijklmnopqr, -a\n${' '.repeat(27)}Next\n`)
+})
 
 test('Header and footer accept explicitly undefined optional values', async () => {
   const pkgPath = join(import.meta.dirname, 'package.json')
@@ -72,8 +95,8 @@ test('Help text string is generated', async (_) => {
 
     Example: argsclopts
 
-    --foo, -f             A foo flag thats a boolean
-    --bar                 A bar flag thats a string
+    --foo, -f              A foo flag thats a boolean
+    --bar                  A bar flag thats a string
 
 argsclopts (v${pkg.version})`
 
