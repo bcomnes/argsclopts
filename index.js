@@ -14,14 +14,30 @@ import { readFile } from 'node:fs/promises'
  * @typedef {Record<string, ArgscloptsOptions & ParseArgsOptionConfig>} ArgscloptsParseArgsOptionsConfig
  */
 
+/**
+ * @typedef {Object} UsageFormatOptions
+ * @property {number | undefined} [lineWidth] - Total line width, including indentation. Omit to disable word wrapping.
+ * @property {number | undefined} [descriptionColumn] - Zero-based description column. Defaults to 27.
+ */
+
 const width = 23
 const indent = '    '
 
 /**
  * @param {ArgscloptsParseArgsOptionsConfig} options - Options matching the config.options shape in util.parseArgs
- * @returns {string} - Description of what the return value represents
+ * @param {UsageFormatOptions} [format] - Optional description layout and wrapping settings.
+ * @returns {string} The formatted option list.
  */
-export function usage (options) {
+export function usage (options, format = {}) {
+  const descriptionColumn = format.descriptionColumn ?? indent.length + width
+  if (!Number.isSafeInteger(descriptionColumn) || descriptionColumn <= indent.length) {
+    throw new RangeError('descriptionColumn must be an integer greater than the label indentation (4)')
+  }
+  if (format.lineWidth !== undefined &&
+    (!Number.isSafeInteger(format.lineWidth) || format.lineWidth <= descriptionColumn)) {
+    throw new RangeError('lineWidth must be an integer greater than descriptionColumn')
+  }
+  const customLayout = format.lineWidth !== undefined || format.descriptionColumn !== undefined
   let output = ''
 
   Object.entries(options)
@@ -38,21 +54,52 @@ export function usage (options) {
       output += helpLabel
 
       let offset = 0
-      if (helpLabel.length >= width) {
+      if (indent.length + helpLabel.length >= descriptionColumn) {
         output += '\n' + indent
       } else {
         offset = helpLabel.length
       }
 
-      output += ' '.repeat(width - offset)
-      output += opt.help
+      output += ' '.repeat(descriptionColumn - indent.length - offset)
+      let description = String(opt.help)
       if (opt.default) {
-        output += ' (default: ' + JSON.stringify(opt.default) + ')'
+        description += ' (default: ' + JSON.stringify(opt.default) + ')'
       }
+      output += customLayout
+        ? formatDescription(description, format.lineWidth === undefined ? undefined : format.lineWidth - descriptionColumn, descriptionColumn)
+        : description
       output += '\n'
     })
 
   return output
+}
+
+/**
+ * Preserve explicit line breaks while wrapping words and aligning continuation lines.
+ * Words longer than the available width are left intact.
+ *
+ * @param {string} description - The complete description, including any default value.
+ * @param {number | undefined} availableWidth - Available description width, or undefined to disable wrapping.
+ * @param {number} column - Description indentation for continuation lines.
+ * @returns {string} The formatted description.
+ */
+function formatDescription (description, availableWidth, column) {
+  const lines = description.split(/\r?\n/u).flatMap(line => {
+    if (availableWidth === undefined) return [line]
+    const wrapped = []
+    let current = ''
+    for (const word of line.match(/\S+/gu) ?? []) {
+      if (current && current.length + 1 + word.length > availableWidth) {
+        wrapped.push(current)
+        current = word
+      } else {
+        current += `${current ? ' ' : ''}${word}`
+      }
+    }
+    wrapped.push(current)
+    return wrapped
+  })
+  return lines.map((line, index) => index > 0 && line ? ' '.repeat(column) + line : line).join('\n')
 }
 
 /**
@@ -149,6 +196,7 @@ export async function footer ({
  * Generate the full help text string
  *
  * @param {Object} params
+ * @param {UsageFormatOptions | undefined} [params.format] - Option description layout and wrapping settings.
  * @param {ArgscloptsParseArgsOptionsConfig} params.options - Options matching the config.options shape in util.parseArgs
  * @param {string} [params.pkgPath] - The path to a package.json.
  * @param {string} [params.name] - The bin name
@@ -163,6 +211,7 @@ export async function footer ({
  */
 export async function formatHelpText ({
   options,
+  format,
   pkgPath,
   name,
   version,
@@ -172,7 +221,7 @@ export async function formatHelpText ({
 }) {
   const helpText = [
     await header({ pkgPath, name, headerFn, exampleFn }),
-    usage(options),
+    usage(options, format),
     await footer({ pkgPath, name, version, footerFn })
   ]
 
@@ -183,6 +232,7 @@ export async function formatHelpText ({
  * Generate and print the full help text string
  *
  * @param {Object} params
+ * @param {UsageFormatOptions | undefined} [params.format] - Option description layout and wrapping settings.
  * @param {ArgscloptsParseArgsOptionsConfig} params.options - Options matching the config.options shape in util.parseArgs
  * @param {string} [params.pkgPath] - The path to a package.json.
  * @param {string} [params.name] - The bin name
@@ -196,6 +246,7 @@ export async function formatHelpText ({
  */
 export async function printHelpText ({
   options,
+  format,
   pkgPath,
   name,
   version,
@@ -205,7 +256,7 @@ export async function printHelpText ({
 }) {
   const helpText = [
     await header({ pkgPath, name, headerFn, exampleFn }),
-    usage(options),
+    usage(options, format),
     await footer({ pkgPath, name, version, footerFn })
   ]
 
